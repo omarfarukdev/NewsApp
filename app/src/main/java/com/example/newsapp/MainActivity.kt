@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.example.newsapp.domain.usecases.AppEntryUseCase
+import com.example.newsapp.presentation.nvgraph.NavGraph
 import com.example.newsapp.presentation.onboarding.OnBoardingScreen
 import com.example.newsapp.presentation.onboarding.OnBoardingViewModel
 import com.example.newsapp.ui.theme.NewsAppTheme
@@ -31,27 +34,42 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var useCases: AppEntryUseCase
+    val viewModel by viewModels<MainViewModel>()
+    /*@Inject
+    lateinit var useCases: AppEntryUseCase*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        installSplashScreen()
-        lifecycleScope.launch {
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                viewModel.splashCondition
+            }
+        }
+        /*lifecycleScope.launch {
             useCases.readAppEntry().collect {
                 Log.d("Test",it.toString())
             }
-        }
+        }*/
         setContent {
-            NewsAppTheme(
+            NewsAppTheme/*(
                 dynamicColor = false
-            ) {
+            ) */{
+                val isSystemInDarkMode = isSystemInDarkTheme()
+                val systemController = rememberSystemUiController()
+                SideEffect {
+                    systemController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = !isSystemInDarkMode
+                    )
+                }
+
                 Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-                    val viewModel: OnBoardingViewModel= hiltViewModel()
+                    /*val viewModel: OnBoardingViewModel= hiltViewModel()
                     OnBoardingScreen(
                         event = viewModel::onEvent
-                    )
+                    )*/
+                    val startDestination = viewModel.startDestination
+                    NavGraph(startDestination = startDestination)
                 }
             }
         }

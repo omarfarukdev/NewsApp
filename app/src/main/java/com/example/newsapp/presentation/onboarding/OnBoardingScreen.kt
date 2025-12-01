@@ -84,7 +84,7 @@ fun OnBoardingScreen(
                 text = buttonState.value[1],
                 onClick = {
                     scope.launch {
-                        if(pagerState.currentPage==3){
+                        if(pagerState.currentPage==2){
                             event(OnBoardingEvent.SaveAppEntry)
                         }
                         else{
