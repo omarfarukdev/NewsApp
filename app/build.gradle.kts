@@ -86,12 +86,26 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
     //Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     //Datastore
     implementation("androidx.datastore:datastore-preferences:1.2.0")
     //Compose Foundation
-    implementation("androidx.compose.foundation:foundation:1.9.5")
+    implementation("androidx.compose.foundation:foundation:1.10.0")
     //Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.36.0")
+
+    implementation("androidx.compose.material:material-icons-core")
+    implementation("androidx.compose.material:material-icons-extended")
+
+    implementation("androidx.paging:paging-runtime:3.3.6")
+    implementation("androidx.paging:paging-common:3.3.6")
+
+    //Room
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    kapt("androidx.room:room-compiler:2.8.4")
+
+
+
 }
