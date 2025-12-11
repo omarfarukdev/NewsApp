@@ -17,10 +17,39 @@ import com.example.newsapp.presentation.Dimens.MediumPadding1
 @Composable
 fun ArticlesList(
     modifier: Modifier = Modifier,
-    articles: LazyPagingItems<Article>,
+    articles: List<Article>,
     onClick:(Article) -> Unit
 ) {
+    if (articles.isEmpty()){
+        EmptyScreen()
+    }
+    //val handlePagingResult = handlePagingResult(articles)
+    //if (handlePagingResult) {
+        LazyColumn(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(MediumPadding1),
+            contentPadding = PaddingValues(all = ExtraSmallPadding2)
+        ) {
+            items(
+                count = articles.size,
+            ) {
+                articles[it]?.let { article ->
+                    ArticleCard(article = article, onClick = {onClick(article)})
+                }
+            }
+        }
+    //}
+}
+@Composable
+fun ArticlesList(
+    modifier: Modifier = Modifier,
+    articles: LazyPagingItems<Article>,
+    onClick: (Article) -> Unit
+) {
+
     val handlePagingResult = handlePagingResult(articles)
+
+
     if (handlePagingResult) {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
@@ -31,13 +60,12 @@ fun ArticlesList(
                 count = articles.itemCount,
             ) {
                 articles[it]?.let { article ->
-                    ArticleCard(article = article, onClick = {onClick(article)})
+                    ArticleCard(article = article, onClick = { onClick(article) })
                 }
             }
         }
     }
 }
-
 @Composable
 fun handlePagingResult(articles: LazyPagingItems<Article>):Boolean {
     val loadState = articles.loadState

@@ -3,11 +3,11 @@ package com.example.newsapp.domain.usecases.news
 import com.example.newsapp.data.local.NewsDao
 import com.example.newsapp.domain.model.Article
 
-class UpsertArticle(
+class GetArticle (
     private val newsDao: NewsDao
-
 ) {
-    suspend operator fun invoke(article: Article) {
-        newsDao.upsert(article)
+
+    suspend operator fun invoke(url: String): Article? {
+        return newsDao.getArticle(url = url)
     }
 }
